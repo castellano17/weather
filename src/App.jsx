@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import WeatherCard from "./components/WeatherCard";
+import Loader from "./components/Loader";
 
 const API_KEY = "0e98db3fe73bb5a1e8953357960dfa34";
 
@@ -9,6 +10,7 @@ function App() {
   const [coord, setCoord] = useState();
   const [weather, setWeather] = useState();
   const [temps, setTemps] = useState();
+  const [isCelsius, setIsCelsius] = useState(true);
 
   const success = (e) => {
     const newCoords = {
@@ -17,7 +19,8 @@ function App() {
     };
     setCoord(newCoords);
   };
-  navigator.geolocation.getCurrentPosition(success);
+
+  const changeUnitTemp = () => setIsCelsius(!isCelsius);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(success);
@@ -30,21 +33,29 @@ function App() {
         .get(URL)
         .then((res) => {
           setWeather(res.data);
-          const celsius = (res.data.min.temp - 273.15).toFixed(2);
-          const fahrenheit = (celsius * (9 / 5) * 32).toFixed(2);
+          const celsius = (res.data.main.temp - 273.15).toFixed(2);
+          const fahrenheit = (celsius * (9 / 5) + 32).toFixed(2);
           const newTemps = {
             celsius,
             fahrenheit,
           };
           setTemps(newTemps);
         })
-        .catch((err) => console.log(er));
+        .catch((err) => console.log(err));
     }
   }, [coord]);
   return (
     <div className="App">
-      <h1>Weather App</h1>
-      <WeatherCard weather={weather} temps={temps} />
+      {weather ? (
+        <WeatherCard
+          weather={weather}
+          temps={temps}
+          isCelsius={isCelsius}
+          changeUnitTemp={changeUnitTemp}
+        />
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }

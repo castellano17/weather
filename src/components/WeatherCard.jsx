@@ -1,8 +1,9 @@
 import React from "react";
 
-const WeatherCard = ({ weather, temps }) => {
+const WeatherCard = ({ weather, temps, isCelsius, changeUnitTemp }) => {
   return (
     <section>
+      <h1>Weather App</h1>
       <h2>
         {weather?.name}, {weather?.sys.country}
       </h2>
@@ -12,7 +13,7 @@ const WeatherCard = ({ weather, temps }) => {
           alt="icon weather"
         />
       </div>
-      <h3>{temps?.celsius} &deg;k</h3>
+      <h3>{isCelsius ? temps?.celsius + " °c" : temps?.fahrenheit + " °k"} </h3>
       <ul>
         <li>
           {weather?.weather[0].main}, {weather?.weather[0].description}
@@ -30,7 +31,7 @@ const WeatherCard = ({ weather, temps }) => {
           {weather?.main.pressure} hPa
         </li>
       </ul>
-      <button>°C/°F</button>
+      <button onClick={changeUnitTemp}>&deg;C/&deg;F</button>
     </section>
   );
 };
