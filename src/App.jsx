@@ -45,7 +45,7 @@ function App() {
     }
   }, [coord]);
   return (
-    <div className="App">
+    <div className="App backgroud__image">
       {weather ? (
         <WeatherCard
           weather={weather}
